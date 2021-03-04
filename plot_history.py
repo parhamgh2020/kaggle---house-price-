@@ -1,9 +1,9 @@
 from matplotlib.pyplot import clf
+import matplotlib.pyplot as plt
 
 
 def plot_history(net_history):
     history = net_history.history
-    import matplotlib.pyplot as plt
     losses = history['loss']
     val_losses = history['val_loss']
     # accuracies = history['accuracy'] if accuracy else None
@@ -14,7 +14,7 @@ def plot_history(net_history):
     plt.ylabel('Loss')
     plt.plot(losses)
     plt.plot(val_losses)
-    plt.legend(['loss', 'val_loss'])
+    plt.legend(['train_loss', 'val_loss'])
 
     # plt.figure()
     # clf()

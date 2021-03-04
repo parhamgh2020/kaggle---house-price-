@@ -38,19 +38,28 @@ rows, cols = data.shape
 from keras.metrics import MeanSquaredError
 
 model = Sequential()
-model.add(Dense(300, input_dim=cols, activity_regularizer=l2(0.01)))
-model.compile(optimizer=SGD(lr=0.1), loss='mse')
-his = model.fit(x_train, y_train, validation_split=0.1, epochs=30)
+model.add(Dense(300, input_dim=cols, activation='relu'))
+model.add(Dense(1, activation='relu'))
+model.compile(optimizer=SGD(lr=0.001), loss='mse')
+his = model.fit(x_train, y_train, validation_split=0.1, epochs=5)
 plot_history(his)
 
 loss_test = model.evaluate(x_test, y_test)
 loss_train = his.history['loss'][-1]
 loss_val = his.history['val_loss'][-1]
-
 print(loss_train, loss_val, loss_test)
 
 # ============================================
 import pandas as pd
 
 df = pd.DataFrame([loss_train, loss_val, loss_test], index=['train', 'val', 'test'])
+df
 # ============================================
+data_scaled = scale(data)
+label = label.to_numpy()
+model.fit(scale(data), label, epochs=10)
+prediction = model.predict(X_submission)
+prediction = prediction.reshape(-1)
+submission = pd.DataFrame(zip(id_submission, prediction), columns=['Id', 'SalePrice'])
+submission.to_csv('submission.csv', index=False)
+# =================================================
